@@ -1,0 +1,462 @@
+<code style="width: auto; background:transparent; display: flex;">
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Space RPG Idle Game</title>
+
+        <!-- Include PicoCSS via CDN -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="assets/style.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script src="assets/main.js" defer></script>
+    </head>
+
+    <body>
+    <div class="container">
+        <h1 class="header" style="margin: 0px">Space RPG Idle Game</h1>
+
+        <p class="flow-text" id="gold-per-sec">
+            Gold per second:
+            <span class="info-value" id="gold-per-sec-value">0</span>
+            | Time Played:
+            <span class="info-value" id="time-played-value">100 Days</span>
+        </p>
+
+
+        <p class="flow-text" style="display: flex; justify-content: center; flex-wrap: wrap; margin-bottom: 10px;" id="game-state">
+            <span class="info-label info-border">Gold:</span>
+            <span class="info-value info-border" id="gold-value">0</span>
+            <span class="info-separator">|</span>
+
+            <span class="info-label info-border">Click Power:</span>
+            <span class="info-value info-border" id="click-power-value">1</span>
+            <span class="info-separator">|</span>
+
+            <span class="info-label info-border">Auto-Clickers:</span>
+            <span class="info-value info-border" id="auto-clickers-value">0</span>
+            <span class="info-separator">|</span>
+
+            <span class="info-label info-border">Gold Multiplier:</span>
+            <span class="info-value info-border" id="gold-multiplier-value">1x</span>
+            <span class="info-separator">|</span>
+
+            <span class="info-label info-border">Prestige Bonus:</span>
+            <span class="info-value info-border" id="prestige-bonus-value">1x</span>
+        </p>
+
+        <div class="row">
+            <div class="col s12">
+                <div class="tabs">
+                    <div class="tab">
+                        <a onclick="showTab('upgrades')">Upgrades</a>
+                    </div>
+                    <div class="tab">
+                        <a onclick="showTab('auto-buyers')">Auto Buyers</a>
+                    </div>
+                    <div class="tab">
+                        <a onclick="showTab('skills')">Skills</a>
+                    </div>
+                    <div class="tab">
+                        <a onclick="showTab('prestige')">Prestige</a>
+                    </div>
+                    <div class="tab">
+                        <a onclick="showTab('achievements')">Achievements</a>
+                    </div>
+                    <div class="tab">
+                        <a onclick="showTab('save')">Save</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Upgrades Tab -->
+        <div id="game-container" class="card-panel">
+            <div id="upgrades" class="card transparent white-text tab-card">
+
+                <div class="row">
+                    <div class="col s12">
+                        <div class="tabs" style="background-color: transparent; padding-bottom: 20px;">
+                            <div id="base-upgrades" class="tab" style="background-color: #34495e;">
+                                <a href="#" onclick="showUpgradeTab('base')" style="color: #ecf0f1;">Base Upgrades</a>
+                            </div>
+                            <div id="fleet-upgrades" class="tab" style="background-color: #2c3e50;">
+                                <a href="#" onclick="showUpgradeTab('fleet')" style="color: #ecf0f1;">Fleet Upgrades</a>
+                            </div>
+                            <div id="resource-upgrades" class="tab" style="background-color: #e74c3c;">
+                                <a href="#" onclick="showUpgradeTab('resource')" style="color: #ecf0f1;">Resource
+                                    Upgrades</a>
+                            </div>
+                            <div id="galactic-upgrades" class="tab" style="background-color: #d35400;">
+                                <a href="#" onclick="showUpgradeTab('galactic')" style="color: #ecf0f1;">Galactic
+                                    Upgrades</a>
+                            </div>
+                            <div id="universe-upgrades" class="tab" style="background-color: #8e44ad;">
+                                <a href="#" onclick="showUpgradeTab('universe')" style="color: #ecf0f1;">Universe
+                                    Upgrades</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="baseUpgrades" class="tab-content upgrade-tab">
+                    <div class="row">
+
+                        <div class="row" id="baseUpgradesTabs">
+                            <div class="col s12">
+                                <div class="tabs">
+                                    <div class="tab">
+                                        <a onclick="showUpgradeCategory('mining')">Mining</a>
+                                    </div>
+                                    <div class="tab">
+                                        <a onclick="showUpgradeCategory('technology')">Technology</a>
+                                    </div>
+                                    <div class="tab">
+                                        <a onclick="showUpgradeCategory('cosmic')">Cosmic Expansion</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Category 1: Mining Upgrades -->
+                        <div class="col s12">
+                            <div id="mining" class="upgrade-category">
+                                <div class="upgrade-buttons">
+                                    <button class="btn" onclick="clickGold()">Mine Asteroid</button>
+                                    <button class="btn" onclick="buyUpgrade(1)">Basic Mining (Cost: <span id="u1-cost">10</span>)
+                                    </button>
+                                    <button class="btn" onclick="buyUpgrade(2)">Improved Mining (Cost: <span
+                                            id="u2-cost">100</span>)
+                                    </button>
+                                    <button class="btn" onclick="buyUpgrade(3)">Advanced Mining (Cost: <span
+                                            id="u3-cost">1,000</span>)
+                                    </button>
+                                    <button class="btn" onclick="buyUpgrade(4)">Efficient Drilling (Cost: <span
+                                            id="u4-cost">10,000</span>)
+                                    </button>
+                                    <button class="btn" onclick="buyUpgrade(5)">Automated Extractors (Cost: <span
+                                            id="u5-cost">100,000</span>)
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Category 2: Technology Upgrades -->
+                        <div class="col s12">
+                            <div id="technology" class="upgrade-category" style="display: none">
+                                <div class="upgrade-buttons">
+                                    <button class="btn" onclick="buyUpgrade(6)">Basic Tech Boost (Cost: <span
+                                            id="u6-cost">2,000</span>)
+                                    </button>
+                                    <button class="btn" onclick="buyUpgrade(7)">Advanced Processing (Cost: <span
+                                            id="u7-cost">20,000</span>)
+                                    </button>
+                                    <button class="btn" onclick="buyUpgrade(8)">Quantum Computing (Cost: <span
+                                            id="u8-cost">200,000</span>)
+                                    </button>
+                                    <button class="btn" onclick="buyUpgrade(9)">Nanobot Assembly (Cost: <span
+                                            id="u9-cost">2,000,000</span>)
+                                    </button>
+                                    <button class="btn" onclick="buyUpgrade(10)">AI Research Lab (Cost: <span
+                                            id="u10-cost">20,000,000</span>)
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Category 3: Cosmic Expansion Upgrades -->
+                        <div class="col s12">
+                            <div id="cosmic" class="upgrade-category" style="display: none">
+                                <div class="upgrade-buttons">
+                                    <button class="btn" onclick="buyUpgrade(11)">Stellar Expansion (Cost: <span
+                                            id="u11-cost">30,000</span>)
+                                    </button>
+                                    <button class="btn" onclick="buyUpgrade(12)">Galactic Colonization (Cost: <span
+                                            id="u12-cost">300,000</span>)
+                                    </button>
+                                    <button class="btn" onclick="buyUpgrade(13)">Interstellar Travel (Cost: <span
+                                            id="u13-cost">3,000,000</span>)
+                                    </button>
+                                    <button class="btn" onclick="buyUpgrade(14)">Cosmic Rift Exploration (Cost: <span
+                                            id="u14-cost">30,000,000</span>)
+                                    </button>
+                                    <button class="btn" onclick="buyUpgrade(15)">Universal Domination (Cost: <span
+                                            id="u15-cost">300,000,000</span>)
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div id="fleetUpgrades" class="tab-content upgrade-tab">
+                    <div class="row">
+
+                        <div class="row" id="fleetUpgradesTabs" style="display: none">
+                            <div class="col s12">
+                                <div class="tabs">
+                                    <div class="tab">
+                                        <a onclick="showUpgradeCategory('soldiers')">Soldiers</a>
+                                    </div>
+                                    <div class="tab">
+                                        <a onclick="showUpgradeCategory('armory')">Armory</a>
+                                    </div>
+                                    <div class="tab">
+                                        <a onclick="showUpgradeCategory('aircraft')">Aircraft</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Category 1: Soldiers Upgrades -->
+                        <div class="col s12">
+                            <div id="soldiers" class="upgrade-category" style="display: none">
+                                <h5>Soldiers Upgrades</h5>
+                                <div class="upgrade-buttons">
+                                    <button class="waves-effect waves-light btn" onclick="buyUpgrade(16)">Basic Combat
+                                        Training (Cost: <span id="u16-cost">15,000</span>)
+                                    </button>
+                                    <button class="waves-effect waves-light btn" onclick="buyUpgrade(17)">Intermediate
+                                        Combat Training (Cost: <span id="u17-cost">75,500</span>)
+                                    </button>
+                                    <button class="waves-effect waves-light btn" onclick="buyUpgrade(18)">Advanced
+                                        Combat Training (Cost: <span id="u18-cost">550,000</span>)
+                                    </button>
+                                    <button class="waves-effect waves-light btn" onclick="buyUpgrade(19)">Specialized
+                                        Tactics (Cost: <span id="u19-cost">6,500,000</span>)
+                                    </button>
+                                    <button class="waves-effect waves-light btn" onclick="buyUpgrade(20)">Elite Unit
+                                        Deployment (Cost: <span id="u20-cost">35,000,000</span>)
+                                    </button>
+                                    <!-- Add more combat upgrades... -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Category 2: Armory Upgrades -->
+                        <div class="col s12">
+                            <div id="armory" class="upgrade-category" style="display: none">
+                                <h5>Armory Upgrades</h5>
+                                <div class="upgrade-buttons">
+                                    <button class="waves-effect waves-light btn" onclick="buyUpgrade(6)">Ballistic
+                                        Weaponry (Cost: <span id="u21-cost">2,000</span>)
+                                    </button>
+                                    <button class="waves-effect waves-light btn" onclick="buyUpgrade(7)">Advanced
+                                        Arsenal (Cost: <span id="u22-cost">20,000</span>)
+                                    </button>
+                                    <button class="waves-effect waves-light btn" onclick="buyUpgrade(8)">Quantum
+                                        Armaments (Cost: <span id="u23-cost">200,000</span>)
+                                    </button>
+                                    <button class="waves-effect waves-light btn" onclick="buyUpgrade(9)">Nanobot
+                                        Infusion (Cost: <span id="u24-cost">2,000,000</span>)
+                                    </button>
+                                    <button class="waves-effect waves-light btn" onclick="buyUpgrade(10)">AI Warfare
+                                        Integration (Cost: <span id="u25-cost">20,000,000</span>)
+                                    </button>
+                                    <!-- Add more armory upgrades... -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Category 3: Aircraft Upgrades -->
+                        <div class="col s12">
+                            <div id="aircraft" class="upgrade-category" style="display: none">
+                                <h5>Aircraft Upgrades</h5>
+                                <div class="upgrade-buttons">
+                                    <button class="waves-effect waves-light btn" onclick="buyUpgrade(11)">Jet Propulsion
+                                        System (Cost: <span id="u26-cost">30,000</span>)
+                                    </button>
+                                    <button class="waves-effect waves-light btn" onclick="buyUpgrade(12)">Galactic
+                                        Navigation Module (Cost: <span id="u27-cost">300,000</span>)
+                                    </button>
+                                    <button class="waves-effect waves-light btn" onclick="buyUpgrade(13)">Interstellar
+                                        Engine Upgrade (Cost: <span id="u28-cost">3,000,000</span>)
+                                    </button>
+                                    <button class="waves-effect waves-light btn" onclick="buyUpgrade(14)">Cosmic Rift
+                                        Exploration Gear (Cost: <span id="u29-cost">30,000,000</span>)
+                                    </button>
+                                    <button class="waves-effect waves-light btn" onclick="buyUpgrade(15)">Universal Air
+                                        Superiority (Cost: <span id="u30-cost">300,000,000</span>)
+                                    </button>
+                                    <!-- Add more aircraft upgrades... -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Achievements Tab -->
+        <div id="achievements" class="card transparent white-text tab-card">
+            <h2 style="margin-bottom: 25px">Achievements</h2>
+            <button id="show-completed-achievements" onclick="changeShowCompletedAchievements()" style="background-color: #101010; color: #bbb8bc">Toggle Completed
+                Achievements
+            </button>
+            <div class="achievement-grid" id="achievement-list"></div>
+        </div>
+
+        <!-- Auto-Buyers Tab -->
+        <div id="auto-buyers" class="card transparent white-text tab-card">
+            <div class="card-content" id="auto-buyers-content">
+                <!-- Content will be dynamically generated here -->
+            </div>
+        </div>
+
+        <!-- Prestige Tab -->
+        <div id="prestige" class="card transparent white-text tab-card">
+            <div class="card-content">
+                <p id="prestigeStatus" style="font-weight: bold;">0 / 0</p>
+                <div class="progress" style="border: 1px solid peachpuff;">
+                    <div id="prestigeProgress" class="determinate"
+                         style="width: 0%; background-color: #2196F3; height: 10px;"></div>
+                </div>
+            </div>
+            <br>
+            <div class="card-action">
+                <a class="btn" onclick="prestige()">Prestige</a>
+            </div>
+        </div>
+
+
+        <div id="skills" class="card transparent white-text tab-card" style="min-height: 500px">
+            <div class="legend-container">
+            <span style="font-weight: bold; color: hsl(330, 30%, 50%); font-size: 30px" id="skill-point-text">You have 0 skill points</span>
+            </div>
+            <div class="legend-container">
+                <span class="legend-text">CP = Click Power</span>
+                <span class="legend-text">ACS = Auto Clickers</span>
+                <span class="legend-text">CK = Click</span>
+                <span class="legend-text">PB = Prestige Bonus</span>
+                <span class="legend-text">GM = Gold Multiplier</span>
+                <span class="legend-text">SP = Skill Points</span>
+            </div>
+            <div class="skill-tree">
+                <div class="skill-node" id="root-node">
+                    <button class="skill-button not-purchased" style="margin: 0 auto; margin-bottom: 25px;" onclick="spendSkillPoint(0)" id="skill-0">Unlock Skills<br>(Cost 1SP)</button>
+                    <div class="skill-branches">
+                        <div class="skill-branch">
+                            <button class="skill-button not-purchased" onclick="spendSkillPoint(1)" id="skill-1">Starburst Surge<br>(2x CP) (Cost 1SP)</button>
+                            <button class="skill-button not-purchased" onclick="spendSkillPoint(2)" id="skill-2">Nebula Clickers<br>(6x AC) (Cost 3SP)</button>
+                        </div>
+                        <div class="skill-branch">
+                            <button class="skill-button not-purchased" onclick="spendSkillPoint(3)" id="skill-3">Galactic Gold Rush<br>(2x GM) (Cost 1SP)</button>
+                            <button class="skill-button not-purchased" onclick="spendSkillPoint(4)" id="skill-4">Prestellar Mastery<br>(6x PB) (Cost 3SP)</button>
+                        </div>
+                        <div class="skill-branch">
+                            <div class="nested-skill-branch">
+                                <button class="skill-button not-purchased" onclick="spendSkillPoint(5)" id="skill-5">Solar Flare Fingers<br>(16x CP) (Cost 8SP)
+                                </button>
+                                <button class="skill-button not-purchased" onclick="spendSkillPoint(6)" id="skill-6">Frostbite Comet<br>(32x CK) (Cost 16SP)
+                                </button>
+                            </div>
+                            <div class="nested-skill-branch">
+                                <button class="skill-button not-purchased" onclick="spendSkillPoint(7)" id="skill-7">Shadow Nebula Strike<br>(16x CK) (Cost 8SP)
+                                </button>
+                                <button class="skill-button not-purchased" onclick="spendSkillPoint(8)" id="skill-8">Supernova Ascension<br>(32x PB) (Cost 16SP)
+                                </button>
+                            </div>
+                        </div>
+                        <div class="skill-branch">
+                            <div class="nested-skill-branch">
+                                <button class="skill-button not-purchased" onclick="spendSkillPoint(9)" id="skill-9">Celestial Dragon Dance<br>(64x AC) (Cost
+                                    32SP)
+                                </button>
+                                <button class="skill-button not-purchased" onclick="spendSkillPoint(10)" id="skill-10">Quantum Harmony<br>(128x GM) (Cost 64SP)
+                                </button>
+                            </div>
+                            <div class="nested-skill-branch">
+                                <button class="skill-button not-purchased">Black Hole Surge</button>
+                                <button class="skill-button not-purchased">Interstellar Clickforce</button>
+                            </div>
+                        </div>
+                        <!-- Additional Skills -->
+                        <div class="skill-branch">
+                            <button class="skill-button not-purchased">Gravity Well Manipulation</button>
+                            <button class="skill-button not-purchased">Nova Cascade Mastery</button>
+                        </div>
+                        <div class="skill-branch">
+                            <button class="skill-button not-purchased">Astro Rift Resonance</button>
+                            <button class="skill-button not-purchased">Quantum Flux Burst</button>
+                        </div>
+                        <div class="skill-branch">
+                            <button class="skill-button not-purchased">Lunar Eclipse Enchantment</button>
+                            <button class="skill-button not-purchased">Stellar Core Fusion</button>
+                        </div>
+                        <div class="skill-branch">
+                            <button class="skill-button not-purchased">Cosmic Echo Mastery</button>
+                            <button class="skill-button not-purchased">Nebula Nova Burst</button>
+                        </div>
+                        <div class="skill-branch">
+                            <button class="skill-button not-purchased">Quantum Vortex Resonance</button>
+                            <button class="skill-button not-purchased">Dark Matter Mastery</button>
+                        </div>
+                        <!-- Additional Skills (Continued) -->
+                        <div class="skill-branch">
+                            <button class="skill-button not-purchased">Aurora Beam Mastery</button>
+                            <button class="skill-button not-purchased">Galaxy Pulse Surge</button>
+                        </div>
+                        <div class="skill-branch">
+                            <button class="skill-button not-purchased">Nebula Infusion Mastery</button>
+                            <button class="skill-button not-purchased">Quantum Shift Burst</button>
+                        </div>
+                        <div class="skill-branch">
+                            <button class="skill-button not-purchased">Stellar Symphony Mastery</button>
+                            <button class="skill-button not-purchased">Celestial Burst Wave</button>
+                        </div>
+                        <div class="skill-branch">
+                            <button class="skill-button not-purchased">Galactic Nova Surge</button>
+                            <button class="skill-button not-purchased">Quantum Resonance Mastery</button>
+                        </div>
+                        <div class="skill-branch">
+                            <button class="skill-button not-purchased">Dark Nebula Mastery</button>
+                            <button class="skill-button not-purchased">Interstellar Harmony Wave</button>
+                        </div>
+                        <div class="skill-branch">
+                            <div class="nested-skill-branch">
+                                <button class="skill-button not-purchased">Plasma Whirlwind Eruption</button>
+                                <button class="skill-button not-purchased">Cryo Meteor Blitz</button>
+                            </div>
+                            <div class="nested-skill-branch">
+                                <button class="skill-button not-purchased">Dark Nebula Fury Strike</button>
+                                <button class="skill-button not-purchased">Galactic Inferno Ascendancy</button>
+                            </div>
+                        </div>
+
+                        <!-- ... -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Save Tab -->
+        <div id="save" class="card transparent white-text tab-card">
+            <button class="btn" onclick="clearGame()">Clear Game</button>
+            <button class="btn" onclick="loadGame()">Load Game</button>
+        </div>
+
+        <!-- Notification Section -->
+        <div id="notification">
+            <a class="">
+                <i>notifications</i>
+            </a>
+        </div>
+    </div>
+
+    </div>
+
+    <!-- Include Materialize JavaScript via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    </body>
+    </html>
+</code>
